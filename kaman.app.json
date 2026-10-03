@@ -1,0 +1,55 @@
+{
+  "name": "Due Diligence Questionnaire Risk Analyzer",
+  "agents": {
+    "risk_policy_analyst": "8fd89cd0-e851-5234-8b74-576f707af5ff",
+    "adverse_screener": "9ee2dccd-54eb-5c09-b5b7-37fe09e83e4b",
+    "case_writer": "664a9151-f056-5724-b5af-1508baeec61f"
+  },
+  "workflows": {
+    "flow": "04e43b1b-c1b4-50ef-8708-fe02463f9481"
+  },
+  "ui": {
+    "title": "Due Diligence Questionnaire Risk Analyzer",
+    "tagline": "Reads a counterparty's completed due diligence questionnaire, checks the answers against your risk policy while screening for adverse information, scores the risk with cited drivers, and routes it - accept, analyst review with a two-day timeout, or the risk committee.",
+    "actions": [
+      {
+        "id": "run",
+        "label": "Run: Due diligence questionnaire review",
+        "description": "A completed due diligence questionnaire arrives. Kaman extracts the answers, checks them against your risk policy and screens the counterparty for adverse information in parallel, scores the risk, and routes it: low risk is accepted, medium goes to an analyst, high is escalated to the risk committee.",
+        "kind": "workflow",
+        "target": "flow",
+        "wrap": "payload",
+        "inputs": [
+          {
+            "name": "counterparty",
+            "label": "Counterparty",
+            "kind": "text",
+            "default": "Northwind Capital Partners"
+          },
+          {
+            "name": "questionnaire",
+            "label": "Questionnaire",
+            "kind": "text",
+            "default": "Q1 Ownership: 62% held by Northwind Holdings (Cayman)... Q7 Sanctions policy: Annual review, last updated 2023... Q12 Litigation: None disclosed... Q15 Data protection: ISO 27001 certified, certificate expired June 2026..."
+          }
+        ]
+      },
+      {
+        "id": "ask",
+        "label": "Ask the Risk Policy Analyst",
+        "description": "Checks questionnaire answers against the risk policy.",
+        "kind": "agent",
+        "target": "risk_policy_analyst",
+        "prompt": "{{question}}",
+        "inputs": [
+          {
+            "name": "question",
+            "label": "Your question",
+            "kind": "text",
+            "default": "Check Northwind Capital Partners' answers against the uploaded risk policy."
+          }
+        ]
+      }
+    ]
+  }
+}

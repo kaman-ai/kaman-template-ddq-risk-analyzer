@@ -1,55 +1,27 @@
 {
   "name": "Due Diligence Questionnaire Risk Analyzer",
   "agents": {
-    "risk_policy_analyst": "8fd89cd0-e851-5234-8b74-576f707af5ff",
-    "adverse_screener": "9ee2dccd-54eb-5c09-b5b7-37fe09e83e4b",
-    "case_writer": "664a9151-f056-5724-b5af-1508baeec61f"
+    "risk_policy_analyst": "2d9d824e-9ebb-5c25-9779-b944a2cae7bf",
+    "adverse_screener": "5190e094-a2e3-5f67-9b49-b3e4bf287b7c",
+    "case_writer": "c23dc735-77cb-5e1f-aa09-4fe5910ceef2"
   },
   "workflows": {
-    "flow": "04e43b1b-c1b4-50ef-8708-fe02463f9481"
+    "flow": "0bb471a6-c97a-582c-9d4c-a42dd1f5fed4"
+  },
+  "scenarios": {
+    "desk": "e6d89f19-5972-5fdb-a1e9-37fd3d6f231a"
   },
   "ui": {
     "title": "Due Diligence Questionnaire Risk Analyzer",
     "tagline": "Reads a counterparty's completed due diligence questionnaire, checks the answers against your risk policy while screening for adverse information, scores the risk with cited drivers, and routes it - accept, analyst review with a two-day timeout, or the risk committee.",
-    "actions": [
-      {
-        "id": "run",
-        "label": "Run: Due diligence questionnaire review",
-        "description": "A completed due diligence questionnaire arrives. Kaman extracts the answers, checks them against your risk policy and screens the counterparty for adverse information in parallel, scores the risk, and routes it: low risk is accepted, medium goes to an analyst, high is escalated to the risk committee.",
-        "kind": "workflow",
-        "target": "flow",
-        "wrap": "payload",
-        "inputs": [
-          {
-            "name": "counterparty",
-            "label": "Counterparty",
-            "kind": "text",
-            "default": "Northwind Capital Partners"
-          },
-          {
-            "name": "questionnaire",
-            "label": "Questionnaire",
-            "kind": "text",
-            "default": "Q1 Ownership: 62% held by Northwind Holdings (Cayman)... Q7 Sanctions policy: Annual review, last updated 2023... Q12 Litigation: None disclosed... Q15 Data protection: ISO 27001 certified, certificate expired June 2026..."
-          }
-        ]
-      },
-      {
-        "id": "ask",
-        "label": "Ask the Risk Policy Analyst",
-        "description": "Checks questionnaire answers against the risk policy.",
-        "kind": "agent",
-        "target": "risk_policy_analyst",
-        "prompt": "{{question}}",
-        "inputs": [
-          {
-            "name": "question",
-            "label": "Your question",
-            "kind": "text",
-            "default": "Check Northwind Capital Partners' answers against the uploaded risk policy."
-          }
-        ]
-      }
-    ]
+    "run": "Run: Due diligence questionnaire review",
+    "chat": {
+      "agent": "adverse_screener",
+      "title": "Ask the Adverse Information Screener",
+      "suggestions": [
+        "The questionnaire names an ISO 27001 certificate 'ISO-Northwind-2024.pdf'. files_search found it in SharePoint; files_get_content returned 'Certificate valid 2024-06 to 2026-06'. Report on it, and on sanctions/adverse-media screening for Northwind Capital Partners and its owner Northwind Holdings (Cayman).",
+        "Find the sanctions policy document the questionnaire mentions and look into Northwind Capital Partners and its owners."
+      ]
+    }
   }
 }
